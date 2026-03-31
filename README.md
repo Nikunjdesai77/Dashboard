@@ -104,17 +104,4 @@ Tests cover:
 # 1. Push to GitHub  2. share.streamlit.io  3. Set app.py as entry
 ```
 
----
 
-## 👤 Author
-
-**Industry-grade ML project** demonstrating:
-- ✅ `sklearn.Pipeline` + `ColumnTransformer` (not manual encoding)
-- ✅ Zero data leakage (split → fit pipeline → evaluate)
-- ✅ Cross-validation + hyperparameter tuning
-- ✅ SHAP model explainability
-- ✅ Model versioning + centralized config
-- ✅ Professional logging + input validation
-- ✅ pytest test suite
-- ✅ Business-terms prediction explanation
-- ✅ Production SaaS dashboard design
