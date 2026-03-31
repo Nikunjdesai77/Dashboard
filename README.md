@@ -117,8 +117,8 @@ CarIQ/
 
 ```bash
 # 1. Install
-git clone https://github.com/your-username/cariq.git
-cd cariq
+git clone https://github.com/Nikunjdesai77/Dashboard.git
+cd Dashboard
 pip install -r requirements.txt
 
 # 2. Train (4 models, cross-validation, auto-best selection)
@@ -213,6 +213,8 @@ Tests cover:
 ---
 
 ## 👤 Author
+
+**Nikunj Desai** — [GitHub @Nikunjdesai77](https://github.com/Nikunjdesai77)
 
 **Industry-grade ML project** demonstrating:
 - ✅ `sklearn.Pipeline` + `ColumnTransformer` (not manual encoding)
