@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/*.log
+
+# Model artifacts (re-trainable)
+model/artifacts/*.pkl
+model/artifacts/*.json
+
+# Legacy artifacts (to be deleted)
+assets/best_model.pkl
+assets/model_meta.pkl
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (keep raw, ignore processed)
+data/processed/*
+!data/processed/.gitkeep
+
+# Distribution
+dist/
+build/
+*.egg-info/
