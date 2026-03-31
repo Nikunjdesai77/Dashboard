@@ -49,12 +49,31 @@ Raw CSV → preprocess() → train_test_split → Pipeline.fit(X_train)
                                               └── Model (XGBoost / RF / GBM / Ridge)
 ```
 
-- **No data leakage** — encoders fit only on training data (inside Pipeline)
-- **4 models** compared: Ridge, Random Forest, Gradient Boosting, XGBoost
-- **Cross-validation** on training set, evaluation on held-out test set
-- **SHAP** explainability (optional, `pip install shap`)
+**Key difference from amateur projects:** Most beginner projects manually call `LabelEncoder.fit_transform()` on the full dataset, then split. This leaks test-set information into the encoder. Our Pipeline ensures the ColumnTransformer fits **only on training data**.
 
-## Results
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1. Install
+git clone https://github.com/your-username/cariq.git
+cd cariq
+pip install -r requirements.txt
+
+# 2. Train (4 models, cross-validation, auto-best selection)
+python -m model.train
+
+# 3. Train with hyperparameter tuning
+python -m model.train --tune
+
+# 4. Launch dashboard
+streamlit run app.py
+```
+
+---
+
+## 🤖 Model Results
 
 | Model | R² | RMSE | CV R² |
 |-------|-----|------|-------|
@@ -66,12 +85,36 @@ Raw CSV → preprocess() → train_test_split → Pipeline.fit(X_train)
 ## Commands
 
 ```bash
-python -m model.train              # standard training
-python -m model.train --tune       # + hyperparameter search
-python -m model.train --tune --cv 10
-python -m pytest tests/ -v         # run tests
+python -m pytest tests/ -v
 ```
 
-## Tech Stack
+Tests cover:
+- Data loading & column presence
+- Preprocessing (nulls, positive prices, feature availability)
+- Input validation (valid inputs, edge cases, error handling)
+- Feature engineering (car_age, km_per_year, prediction explanation)
+- Schema consistency (NUM + CAT = ML_FEATURES)
 
-Python 3.11+ · Streamlit · scikit-learn · XGBoost · SHAP · Plotly
+---
+
+## 📦 Deployment
+
+```bash
+# Streamlit Cloud
+# 1. Push to GitHub  2. share.streamlit.io  3. Set app.py as entry
+```
+
+---
+
+## 👤 Author
+
+**Industry-grade ML project** demonstrating:
+- ✅ `sklearn.Pipeline` + `ColumnTransformer` (not manual encoding)
+- ✅ Zero data leakage (split → fit pipeline → evaluate)
+- ✅ Cross-validation + hyperparameter tuning
+- ✅ SHAP model explainability
+- ✅ Model versioning + centralized config
+- ✅ Professional logging + input validation
+- ✅ pytest test suite
+- ✅ Business-terms prediction explanation
+- ✅ Production SaaS dashboard design
