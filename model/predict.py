@@ -14,14 +14,12 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import MODEL_PKL, ENCODERS_PKL, SCALER_PKL, META_JSON
+from config import MODEL_PKL, ENCODERS_PKL, SCALER_PKL, META_JSON, NUM_FEATURES, CAT_FEATURES
 from utils.logger import get_logger
 
 logger = get_logger("model.predict")
 
-# Feature schema (must match training)
-NUM_FEATURES = ["car_age", "km_driven", "km_per_year", "owner_num"]
-CAT_FEATURES = ["fuel", "seller_type", "transmission", "brand_clean"]
+# Feature schema (imported from config — single source of truth)
 ALL_FEATURES = NUM_FEATURES + CAT_FEATURES
 
 
@@ -98,17 +96,7 @@ def predict_price(
             row_df[col] = row_df[col].astype(str)
 
         # Pipeline.predict handles ColumnTransformer + model
-        if hasattr(pipeline, 'predict') and hasattr(pipeline, 'named_steps'):
-            raw_pred = float(pipeline.predict(row_df)[0])
-        else:
-            # Legacy fallback: pipeline is a raw model, use encoders/scaler
-            from utils.preprocessing import encode_single
-            row_enc   = encode_single(input_row, encoders)
-            feat_cols = meta.get("feat_cols", [])
-            X_in      = np.array([[row_enc.get(c, 0) for c in feat_cols]], dtype=float)
-            if meta.get("use_scaled") and scaler is not None:
-                X_in = scaler.transform(X_in)
-            raw_pred = float(pipeline.predict(X_in)[0])
+        raw_pred = float(pipeline.predict(row_df)[0])
 
         pred = max(raw_pred, 0)
         r2   = meta["results"][meta["best_name"]]["r2"]

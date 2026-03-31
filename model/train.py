@@ -48,15 +48,14 @@ from config import (
     RANDOM_SEED, TEST_SIZE, ARTIFACTS_DIR,
     MODEL_PKL, ENCODERS_PKL, SCALER_PKL, META_JSON,
     CV_FOLDS, HYPERPARAM_GRIDS,
+    NUM_FEATURES, CAT_FEATURES,
 )
 from utils.preprocessing import load_raw, preprocess
 from utils.logger import get_logger
 
 logger = get_logger("model.train")
 
-# ── Feature schema ────────────────────────────────────────────────────────────
-NUM_FEATURES = ["car_age", "km_driven", "km_per_year", "owner_num"]
-CAT_FEATURES = ["fuel", "seller_type", "transmission", "brand_clean"]
+# ── Feature schema (imported from config — single source of truth) ────────────
 ALL_FEATURES = NUM_FEATURES + CAT_FEATURES
 TARGET = "selling_price"
 

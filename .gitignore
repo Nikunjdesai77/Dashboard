@@ -23,9 +23,9 @@ Thumbs.db
 # Logs
 logs/*.log
 
-# Model artifacts (re-trainable)
-model/artifacts/*.pkl
-model/artifacts/*.json
+# Model artifacts — TRACK for deployment (untrack if sensitive)
+# model/artifacts/*.pkl
+# model/artifacts/*.json
 
 # Legacy artifacts (to be deleted)
 assets/best_model.pkl

@@ -9,11 +9,10 @@ This is the ONLY preprocessing file in the project. Handles:
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
 from config import (
-    CURRENT_YEAR, DATASET_CSV, OWNER_MAP, ML_FEATURES,
-    TARGET_COL, ENCODE_COLS, TOP_BRAND_COUNT, DEFAULT_CITIES,
+    CURRENT_YEAR, DATASET_CSV, OWNER_MAP,
+    TOP_BRAND_COUNT, DEFAULT_CITIES,
     RANDOM_SEED,
 )
 from utils.logger import get_logger
@@ -139,62 +138,9 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
     logger.info(f"Preprocessing complete: {len(df):,} rows retained")
     return df
 
-
 # ══════════════════════════════════════════════════════════════════════════════
-# 4. ML FEATURE MATRIX BUILDER (for training)
+# NOTE: build_ml_df() and encode_single() have been REMOVED in v3.0.
+# The sklearn Pipeline (ColumnTransformer) handles all encoding internally.
+# No manual LabelEncoder code is needed.
 # ══════════════════════════════════════════════════════════════════════════════
-def build_ml_df(df: pd.DataFrame) -> tuple:
-    """
-    Build ML-ready feature matrix from preprocessed DataFrame.
-    Returns: (X, y, feature_cols, label_encoders)
-    
-    IMPORTANT: Label encoders are fit HERE during training and persisted.
-    During inference, use encode_single() with the saved encoders.
-    This prevents data leakage.
-    """
-    logger.info("Building ML feature matrix...")
-    ml = df.copy()
-    encoders = {}
 
-    for col in ENCODE_COLS:
-        key = "brand" if col == "brand_clean" else col
-        enc_name = "brand_enc" if col == "brand_clean" else f"{col}_enc"
-        if col in ml.columns:
-            le = LabelEncoder()
-            ml[enc_name] = le.fit_transform(ml[col].astype(str))
-            encoders[key] = le
-        else:
-            ml[enc_name] = 0
-
-    feat_cols = [c for c in ML_FEATURES if c in ml.columns]
-    X = ml[feat_cols].fillna(0).astype(float)
-    y = ml[TARGET_COL]
-
-    logger.info(f"Feature matrix: {X.shape[0]} samples × {X.shape[1]} features")
-    logger.info(f"Features: {feat_cols}")
-    return X, y, feat_cols, encoders
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 5. SINGLE-ROW ENCODER (for inference — uses SAVED encoders, no leakage)
-# ══════════════════════════════════════════════════════════════════════════════
-def encode_single(row_dict: dict, encoders: dict) -> dict:
-    """
-    Encode a single input row using previously fitted label encoders.
-    This is used during prediction — encoders come from training artifacts.
-    """
-    out = dict(row_dict)
-    enc_map = {
-        "fuel":         ("fuel",         "fuel_enc"),
-        "seller_type":  ("seller_type",  "seller_type_enc"),
-        "transmission": ("transmission", "transmission_enc"),
-        "brand_clean":  ("brand",        "brand_enc"),
-    }
-    for raw_col, (enc_key, enc_col) in enc_map.items():
-        le = encoders.get(enc_key)
-        val = str(row_dict.get(raw_col, "")).strip()
-        if le is not None and val in le.classes_:
-            out[enc_col] = int(le.transform([val])[0])
-        else:
-            out[enc_col] = 0
-    return out
