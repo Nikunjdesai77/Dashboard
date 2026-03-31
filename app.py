@@ -18,7 +18,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        "About": "**CarIQ v2.1** — Production-grade Used Car Intelligence Dashboard",
+        "About": "**CarIQ v3.0** — Production-grade Used Car Intelligence Dashboard",
     },
 )
 
